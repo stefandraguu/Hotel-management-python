@@ -1,0 +1,161 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+            th {
+                background-color: #5e1914;
+                text-align: center;
+            }
+            .form-row {
+                display: table-row;
+                cursor: pointer;
+                background-color: white;
+                transition: background-color 0.3s;
+            }
+            .form-row:hover {
+                background-color: #e0e0e0;
+            }
+            .form-cell {
+                display: table-cell;
+                padding: 8px;
+                border: 1px solid #ddd;
+            }
+        </style>
+
+    </head>
+    <body>
+        <form action="/" method="post"  >
+            <button type="submit">go home</button>
+        </form>
+
+        <h1>Available Rooms</h1>
+        <form action="/add_client_accomodation" method="POST">
+
+            <label for="room_id">Room Id</label>
+            <input type="number" id="room_id" name="room_id">
+
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date" name="start-date" required>
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" name="end-date" required>
+            <label for="name">Resident name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <input type="hidden" id="selected-room-id" name="room_id" value="">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Beds</th>
+                        <th>Price Per Night</th>
+                        <th>Rating</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for room in rooms %}
+                    <tr class="form-row" >
+                        <td class="form-cell">{{ room['id'] }}</td>
+                        <td class="form-cell">{{ room['beds'] }}</td>
+                        <td class="form-cell">{{ room['ppn'] }}</td>
+                        <td class="form-cell">{{ (room['rating'] / (room['no_ratings'] + 0.0001)) | round(2) }}</td>
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Submit</button>
+        </form>
+        <script>
+            // This object contains the overlapping dates for each room, passed from the backend
+            const overlappingDates = JSON.parse('{{ overlapping_dates | default({}) | tojson | safe }}');
+
+
+            // Get references to the inputs
+            const roomIdInput = document.getElementById('room_id');
+            const startDateInput = document.getElementById('start-date');
+            const endDateInput = document.getElementById('end-date');
+
+            // Function to validate selected dates against overlapping ranges
+            function validateDate(inputDate, dateRanges) {
+                const selectedDate = new Date(inputDate);
+                for (const range of dateRanges) {
+                    const rangeStart = new Date(range.start);
+                    const rangeEnd = new Date(range.end);
+                    if (selectedDate >= rangeStart && selectedDate <= rangeEnd) {
+                        return false; // Date is within an existing range
+                    }
+                }
+                return true; // Date is valid
+            }
+
+            // Update disabled dates based on room_id
+            function updateDisabledDates() {
+                const roomId = roomIdInput.value;
+
+                // Reset inputs
+                startDateInput.value = '';
+                endDateInput.value = '';
+                endDateInput.min = '';
+                startDateInput.min = '';
+
+                // If the room_id has overlapping dates
+                if (roomId && overlappingDates[roomId]) {
+                    const overlaps = overlappingDates[roomId];
+
+                    // Add event listeners for validation
+                    startDateInput.onchange = () => {
+                        if (!validateDate(startDateInput.value, overlaps)) {
+                            alert(`Start date overlaps with an existing booking.`);
+                            startDateInput.value = '';
+                        }
+                    };
+
+                    endDateInput.onchange = () => {
+                        if (!validateDate(endDateInput.value, overlaps)) {
+                            alert(`End date overlaps with an existing booking.`);
+                            endDateInput.value = '';
+                        }
+                    };
+                } else {
+                    // If no overlaps, clear event listeners
+                    startDateInput.onchange = null;
+                    endDateInput.onchange = null;
+                }
+            }
+
+            // Attach the updateDisabledDates function to the room_id input
+            roomIdInput.addEventListener('input', updateDisabledDates);
+        </script>
+
+        <script>
+
+            //Optional: Ensure the end date is always after the start date
+           const startDateInput1 = document.getElementById('start-date');
+           const endDateInput1 = document.getElementById('end-date');
+
+           startDateInput1.addEventListener('change', () => {
+               const startDate = startDateInput1.value;
+               endDateInput1.min = startDate; // Set the minimum date for the end date
+           });
+
+           endDateInput1.addEventListener('change', () => {
+               const endDate = endDateInput1.value;
+               startDateInput1.max = endDate; // Set the maximum date for the start date
+           });
+       </script>
+    </body>
+    </html>

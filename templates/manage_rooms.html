@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #5e1914;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <form action="/" method="post"  >
+        <button type="submit">go home</button>
+    </form>    
+    <button id="toggleButton1">add a room</button>
+
+    <form action="/add_room" method="post" id="myForm1" >
+        <label for="id">Room ID:</label>
+        <input type="number" id="id" name="id" required>
+
+        <label for="beds">Number of Beds:</label>
+        <input type="number" id="beds" name="beds" required>
+
+        <label for="ppn">Price Per Night:</label>
+        <input type="number" id="ppn" name="ppn" step="0.01" required>
+
+        
+
+        <button type="submit">Add Room</button>
+    </form>
+    <br><br>
+    <button id="toggleButton2">delete a room</button>
+    <form action="/delete_room" method="POST" id="myForm2" >
+        <label for="id">Id:</label>
+        
+        <select id="id" name="id">
+            {% for room in rooms %}
+            <option value="{{room['id']}}">{{room['id']}}</option>
+            
+            {% endfor %}
+        </select>
+        <button type="submit">submit</button>
+    </form>
+    <br><br>
+    
+    <br><br>
+    <h1>Available Rooms</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Beds</th>
+                <th>Price Per Night</th>
+                <th>Rating</th>
+                <th>Number of Ratings</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for room in rooms %}
+            <tr>
+                <td>{{ room['id'] }}</td>
+                <td>{{ room['beds'] }}</td>
+                <td>{{ room['ppn'] }}</td>
+                <td>{{ room['rating'] }}</td>
+                <td>{{ room['no_ratings'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        // Get the button and form elements
+        const toggleButton1 = document.getElementById('toggleButton1');
+        const form1 = document.getElementById('myForm1');
+
+        // Add an event listener to the button
+        toggleButton1.addEventListener('click', function() {
+            // Toggle the visibility of the form
+            if (form1.style.display === 'none') {
+                form1.style.display = 'block';
+                toggleButton1.textContent = 'Hide Form add room';  // Change button text
+            } else {
+                form1.style.display = 'none';
+                toggleButton1.textContent = 'Show Form add room';  // Change button text
+            }
+        });
+        const toggleButton2 = document.getElementById('toggleButton2');
+        const form2 = document.getElementById('myForm2');
+        // Add an event listener to the button
+        toggleButton2.addEventListener('click', function() {
+            // Toggle the visibility of the form
+            if (form2.style.display === 'none') {
+                form2.style.display = 'block';
+                toggleButton2.textContent = 'Hide Form delete room';  // Change button text
+            } else {
+                form2.style.display = 'none';
+                toggleButton2.textContent = 'Show Form delete room';  // Change button text
+            }
+        });
+        const toggleButton3 = document.getElementById('toggleButton3');
+        const form3 = document.getElementById('myForm3');
+
+        // Add an event listener to the button
+        toggleButton3.addEventListener('click', function() {
+            // Toggle the visibility of the form
+            if (form3.style.display === 'none') {
+                form3.style.display = 'block';
+                toggleButton3.textContent = 'Hide Form edit room';  // Change button text
+            } else {
+                form3.style.display = 'none';
+                toggleButton3.textContent = 'Show Form edit room';  // Change button text
+            }
+        });
+    </script>
+</body>
+</html>

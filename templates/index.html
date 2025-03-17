@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+</head>
+<body>
+    <img src="{{ url_for('static', filename='back.webp') }}" alt="Hotel Logo" class="fixed-image">
+
+    <!-- Page content -->
+    <form action="/action_handler" method="POST">
+        <label for="action">Action:</label>
+        
+        <select id="action" name="action">
+            <option value="manage_accomodations">Manage accomodations</option>
+            <option value="manage_rooms">manage rooms</option>
+            <option value="overview">see_calendar</option>
+            <option value="client">client</option>
+        </select>
+        <button type="submit">submit</button>
+    </form>
+    
+</body>
+</html>

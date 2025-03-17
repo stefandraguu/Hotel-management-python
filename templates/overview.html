@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Accommodations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .room-section {
+            margin-bottom: 50px;
+        }
+        .room-header {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .calendar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 15px;
+        }
+        .day {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .day.booked {
+            background: linear-gradient(to bottom, #ffb3b3, #ff6666); /* Gradient for booked days */
+        }
+        .day.empty {
+            background-color: #f9f9f9; /* Normal days */
+        }
+    </style>
+</head>
+<body>
+    <form action="/" method="post"  >
+        <button type="submit">go home</button>
+    </form>    
+
+    {% for room in rooms %}
+    <div class="room-section">
+        <div class="room-header">Room ID: {{ room['id'] }} | Beds: {{ room['beds'] }} | Price: ${{ room['ppn'] }} | Rating: {{ room['rating'] }} ({{ room['no_ratings'] }} reviews)</div>
+
+        <!-- Accommodations for this room -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date Start</th>
+                    <th>Date End</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for accomodation in accomodations if accomodation['room_id'] == room['id'] %}
+                <tr>
+                    <td>{{ accomodation['id'] }}</td>
+                    <td>{{ accomodation['date_start'] }}</td>
+                    <td>{{ accomodation['date_end'] }}</td>
+                    <td>{{ accomodation['name'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Calendar -->
+        <div class="calendar">
+            {% for day in calendars[room['id']] %}
+            <div class="day {% if day.is_booked %}booked{% else %}empty{% endif %}">
+                {{ day.date.day }}
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+    {% endfor %}
+</body>
+</html>

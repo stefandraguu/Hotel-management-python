@@ -1,0 +1,105 @@
+/* global.css */
+
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f1e4; /* Crem deschis */
+    color: #5c0029; /* Vișiniu */
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #7a003c; /* Vișiniu închis */
+}
+
+button {
+    background-color: #7a003c; /* Vișiniu închis */
+    color: #f8f1e4; /* Crem deschis */
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #5c0029; /* Vișiniu */
+}
+
+/* Form elements */
+form label {
+    font-weight: bold;
+    color: #7a003c;
+}
+
+input[type="text"], input[type="number"], input[type="date"], select {
+    border: 1px solid #7a003c;
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 10px;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th {
+    background-color: #7a003c; /* Vișiniu închis */
+    color: #f8f1e4; /* Crem deschis */
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+td {
+    border: 1px solid #7a003c;
+    padding: 10px;
+    text-align: center;
+    color: #5c0029; /* Vișiniu */
+    background-color: #f8f1e4; /* Crem deschis */
+}
+
+tr:nth-child(even) {
+    background-color: #f2d9c2; /* Crem deschis mai închis */
+}
+
+/* Hover effects for rows */
+tr:hover {
+    background-color: #f4a1b2; /* Crem cu tentă de roz */
+}
+
+/* Calendar styles */
+.calendar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.day {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    color: #5c0029;
+    border: 1px solid #7a003c;
+    background-color: #f8f1e4;
+    font-weight: bold;
+}
+
+.day.booked {
+    background: linear-gradient(to bottom, #f7c1c1, #d98282); /* Gradient roșiatic */
+    color: white;
+}
+
+.day.empty:hover {
+    background-color: #f4a1b2; /* Crem cu tentă de roz */
+    cursor: pointer;
+}

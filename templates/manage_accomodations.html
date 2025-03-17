@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+</head>
+<body>
+    
+
+    <img src="{{ url_for('static', filename='back.webp') }}" alt="Hotel Logo" class="fixed-image">
+    <form action="/" method="post"  >
+        <button type="submit">go home</button>
+    </form>    
+
+    <form action="/add_accomodation" method="post">
+        
+        <label for="room_id">Room Id</label>    
+        <input type="number" id="room_id" name="room_id" required>
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date" name="start-date" required>
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date" name="end-date" required>
+        <label for="name">Resident name:</label>
+        <input type="text" id="name" name="name" required>
+        
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <form action="/delete_accomodation" method="POST" >
+        <p>Delete accomodation</p>
+        <label for="id">Id:</label>
+        
+        <select id="id" name="id">
+            {% for accomodation in accomodations %}
+            <option value="{{accomodation['id']}}">{{accomodation['id']}}</option>
+            
+            {% endfor %}
+        </select>
+        <label for="rating">rating</label>
+        <input type="number" name="rating"  id="rating">
+        <button type="submit">delete</button>
+    </form>
+
+    <h1>All current accomodations</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>roomid</th>
+                
+                <th>date_Start</th>
+                <th>date_end</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for accomodation in accomodations %}
+            <tr>
+                <td>{{ accomodation['id'] }}</td>
+                <td>{{ accomodation['room_id'] }}</td>
+                
+                <td>{{ accomodation['date_start'] }}</td>
+                <td>{{ accomodation['date_end'] }}</td>
+                <td>{{ accomodation['name'] }}</td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h1>Available Rooms</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Beds</th>
+                <th>Price Per Night</th>
+                <th>Rating</th>
+                <th>Number of Ratings</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for room in rooms %}
+            <tr>
+                <td>{{ room['id'] }}</td>
+                <td>{{ room['beds'] }}</td>
+                <td>{{ room['ppn'] }}</td>
+                <td>{{ room['rating'] }}</td>
+                <td>{{ room['no_ratings'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <script>
+        
+         //Optional: Ensure the end date is always after the start date
+        const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+
+        startDateInput.addEventListener('change', () => {
+            const startDate = startDateInput.value;
+            endDateInput.min = startDate; // Set the minimum date for the end date
+        });
+
+        endDateInput.addEventListener('change', () => {
+            const endDate = endDateInput.value;
+            startDateInput.max = endDate; // Set the maximum date for the start date
+        });
+    </script>
+</body>
+</html>
